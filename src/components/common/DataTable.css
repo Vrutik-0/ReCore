@@ -1,0 +1,42 @@
+.datatable-wrapper {
+  background: var(--bg-primary);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 2px 2px 0 var(--border);
+}
+
+.datatable-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: var(--border-width) solid var(--border);
+  background: var(--bg-secondary);
+}
+
+.datatable-count {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.datatable-scroll {
+  overflow-x: auto;
+}
+
+.datatable-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-top: var(--border-width) solid var(--border);
+  background: var(--bg-secondary);
+}
+
+.pagination-info {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
