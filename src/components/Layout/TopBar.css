@@ -9,6 +9,7 @@
   position: sticky;
   top: 0;
   z-index: 50;
+  box-shadow: var(--shadow-sm);
 }
 
 .topbar-left {
@@ -63,8 +64,9 @@
 }
 
 .topbar-search input:focus {
-  outline: 2px solid var(--border);
-  outline-offset: -1px;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  outline: none;
 }
 
 .topbar-notification {
@@ -124,7 +126,7 @@
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-md);
   z-index: 200;
-  box-shadow: 3px 3px 0 var(--border);
+  box-shadow: var(--shadow-lg);
 }
 
 .search-hint,
@@ -259,7 +261,7 @@
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius-md);
   z-index: 200;
-  box-shadow: 3px 3px 0 var(--border);
+  box-shadow: var(--shadow-lg);
   overflow: hidden;
 }
 

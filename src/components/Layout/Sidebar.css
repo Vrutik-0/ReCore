@@ -12,6 +12,7 @@
   transition: width var(--transition-normal);
   overflow-x: hidden;
   overflow-y: auto;
+  box-shadow: var(--shadow-md);
 }
 
 .sidebar-collapsed {
