@@ -36,7 +36,7 @@
   border: var(--border-width) solid var(--border);
 }
 
-.kpi-accent .kpi-icon-wrap { background: var(--accent); color: #000; }
+.kpi-accent .kpi-icon-wrap { background: var(--accent); color: #ffffff; }
 .kpi-success .kpi-icon-wrap { background: var(--success); color: #000; }
 .kpi-warning .kpi-icon-wrap { background: var(--warning); color: #000; }
 .kpi-info .kpi-icon-wrap { background: var(--info); color: #000; }

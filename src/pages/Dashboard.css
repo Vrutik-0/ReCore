@@ -5,6 +5,107 @@
   margin-top: 4px;
 }
 
+/* ===== Operations KPI Grid ===== */
+.ops-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.ops-kpi-card {
+  padding: 0;
+  overflow: hidden;
+  border-bottom-width: 3px;
+  transition: transform var(--transition-normal);
+}
+
+.ops-kpi-card:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--border);
+}
+
+.ops-kpi-receipt { border-bottom-color: var(--info-border); }
+.ops-kpi-delivery { border-bottom-color: var(--danger-border); }
+.ops-kpi-products { border-bottom-color: var(--accent); }
+
+.ops-kpi-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 20px 0 20px;
+}
+
+.ops-kpi-header h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.ops-kpi-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  border: var(--border-width) solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--bg-tertiary);
+}
+
+.ops-kpi-receipt .ops-kpi-icon { background: var(--info); }
+.ops-kpi-delivery .ops-kpi-icon { background: var(--danger); }
+.ops-kpi-products .ops-kpi-icon { background: var(--accent); }
+
+.ops-kpi-metrics {
+  display: flex;
+  gap: 0;
+  padding: 16px 0 0 0;
+  margin-top: 14px;
+  border-top: var(--border-width) solid var(--border);
+}
+
+.ops-metric {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  border-right: var(--border-width) solid var(--border);
+}
+
+.ops-metric:last-child {
+  border-right: none;
+}
+
+.ops-metric-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+.ops-metric-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.ops-metric-late .ops-metric-value {
+  color: var(--danger-text);
+}
+
+.ops-metric-waiting .ops-metric-value {
+  color: var(--warning-text);
+}
+
+.ops-metric-warning .ops-metric-value {
+  color: var(--warning-text);
+}
+
+/* ===== KPI Grid (legacy/simple) ===== */
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -12,6 +113,7 @@
   margin-bottom: 32px;
 }
 
+/* ===== Dashboard Grid ===== */
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -144,6 +246,7 @@
 
 @media (max-width: 768px) {
   .dashboard-grid { grid-template-columns: 1fr; }
+  .ops-kpi-grid { grid-template-columns: 1fr; }
   .kpi-grid { grid-template-columns: 1fr 1fr; }
 }
 

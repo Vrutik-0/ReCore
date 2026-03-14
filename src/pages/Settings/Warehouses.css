@@ -32,7 +32,7 @@
   border-radius: var(--radius-sm);
   background: var(--accent);
   border: var(--border-width) solid var(--border);
-  color: #000;
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;

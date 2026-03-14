@@ -19,17 +19,37 @@ export function AuthProvider({ children }) {
     return loadData('users') || [];
   }
 
-  function signup(name, email, password, role) {
+  function signup({ loginId, email, password }) {
     const users = getUsers();
-    if (users.find(u => u.email === email)) {
-      return { success: false, error: 'Email already registered' };
+
+    if (!loginId || loginId.length < 6 || loginId.length > 12) {
+      return { success: false, error: 'Login ID must be between 6-12 characters' };
     }
+    if (users.find(u => u.loginId === loginId)) {
+      return { success: false, error: 'Login ID already exists. Please choose a different one.' };
+    }
+    if (users.find(u => u.email === email)) {
+      return { success: false, error: 'Email ID already registered' };
+    }
+    if (password.length < 8) {
+      return { success: false, error: 'Password must be more than 8 characters' };
+    }
+    if (!/[a-z]/.test(password)) {
+      return { success: false, error: 'Password must contain at least one lowercase letter' };
+    }
+    if (!/[A-Z]/.test(password)) {
+      return { success: false, error: 'Password must contain at least one uppercase letter' };
+    }
+    if (!/[^a-zA-Z0-9]/.test(password)) {
+      return { success: false, error: 'Password must contain at least one special character' };
+    }
+
     const newUser = {
       id: Date.now().toString(36),
-      name,
+      loginId,
       email,
       password,
-      role: role || 'Inventory Manager',
+      role: 'Inventory Manager',
       createdAt: new Date().toISOString(),
     };
     users.push(newUser);
@@ -39,11 +59,11 @@ export function AuthProvider({ children }) {
     return { success: true };
   }
 
-  function login(email, password) {
+  function login(loginId, password) {
     const users = getUsers();
-    const found = users.find(u => u.email === email && u.password === password);
+    const found = users.find(u => u.loginId === loginId && u.password === password);
     if (!found) {
-      return { success: false, error: 'Invalid email or password' };
+      return { success: false, error: 'Invalid Login Id or Password' };
     }
     const { password: _, ...safeUser } = found;
     setUser(safeUser);

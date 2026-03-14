@@ -4,11 +4,12 @@ import { User, Mail, Shield, Save } from 'lucide-react';
 
 export default function Profile() {
   const { user, updateProfile } = useAuth();
-  const [form, setForm] = useState({ name: user?.name || '', email: user?.email || '', role: user?.role || '' });
+  const displayName = user?.loginId || user?.name || '';
+  const [form, setForm] = useState({ loginId: displayName, email: user?.email || '', role: user?.role || '' });
   const [saved, setSaved] = useState(false);
 
   const handleSave = () => {
-    updateProfile({ name: form.name });
+    updateProfile({ loginId: form.loginId });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
@@ -24,20 +25,21 @@ export default function Profile() {
           <div style={{
             width: 72, height: 72, borderRadius: '50%',
             background: 'var(--accent)',
-            color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: '1.8rem', fontWeight: 800,
+            border: '1px solid var(--border)',
           }}>
-            {user?.name?.charAt(0).toUpperCase()}
+            {displayName.charAt(0).toUpperCase()}
           </div>
           <div>
-            <h2 style={{ marginBottom: 2 }}>{user?.name}</h2>
+            <h2 style={{ marginBottom: 2 }}>{displayName}</h2>
             <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>{user?.role}</span>
           </div>
         </div>
 
         <div className="form-group">
-          <label><User size={13} style={{ marginRight: 4, verticalAlign: '-2px' }} /> Full Name</label>
-          <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+          <label><User size={13} style={{ marginRight: 4, verticalAlign: '-2px' }} /> Login Id</label>
+          <input value={form.loginId} disabled style={{ opacity: 0.6 }} />
         </div>
 
         <div className="form-group">
@@ -48,11 +50,6 @@ export default function Profile() {
         <div className="form-group">
           <label><Shield size={13} style={{ marginRight: 4, verticalAlign: '-2px' }} /> Role</label>
           <input value={form.role} disabled style={{ opacity: 0.6 }} />
-        </div>
-
-        <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 12 }}>
-          <button className="btn btn-primary" onClick={handleSave}><Save size={16} /> Save Changes</button>
-          {saved && <span style={{ color: 'var(--success)', fontSize: '0.85rem' }}>✓ Profile updated</span>}
         </div>
 
         <p style={{ color: 'var(--text-muted)', fontSize: '0.78rem', marginTop: 20 }}>

@@ -6,15 +6,13 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ForgotPassword from './pages/ForgotPassword';
 import Dashboard from './pages/Dashboard';
-import ProductList from './pages/Products/ProductList';
-import Categories from './pages/Products/Categories';
-import ReorderRules from './pages/Products/ReorderRules';
 import Receipts from './pages/Operations/Receipts';
 import Deliveries from './pages/Operations/Deliveries';
-import Transfers from './pages/Operations/Transfers';
 import Adjustments from './pages/Operations/Adjustments';
+import Stock from './pages/Stock';
 import MoveHistory from './pages/Operations/MoveHistory';
 import Warehouses from './pages/Settings/Warehouses';
+import Locations from './pages/Settings/Locations';
 import Profile from './pages/Profile';
 
 function ProtectedRoute({ children }) {
@@ -39,15 +37,13 @@ function AppRoutes() {
       <Route path="/" element={<ProtectedRoute><AppProvider><AppLayout /></AppProvider></ProtectedRoute>}>
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="products" element={<ProductList />} />
-        <Route path="products/categories" element={<Categories />} />
-        <Route path="products/reorder-rules" element={<ReorderRules />} />
         <Route path="operations/receipts" element={<Receipts />} />
         <Route path="operations/deliveries" element={<Deliveries />} />
-        <Route path="operations/transfers" element={<Transfers />} />
         <Route path="operations/adjustments" element={<Adjustments />} />
-        <Route path="operations/move-history" element={<MoveHistory />} />
+        <Route path="stock" element={<Stock />} />
+        <Route path="move-history" element={<MoveHistory />} />
         <Route path="settings/warehouses" element={<Warehouses />} />
+        <Route path="settings/locations" element={<Locations />} />
         <Route path="profile" element={<Profile />} />
       </Route>
 

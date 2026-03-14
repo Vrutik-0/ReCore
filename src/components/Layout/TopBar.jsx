@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Search, Bell, Menu, X, Package, Warehouse,
-  ClipboardCheck, Truck, ArrowLeftRight, ClipboardList, AlertTriangle
+  ClipboardCheck, Truck, ClipboardList, AlertTriangle
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { useAuth } from '../../context/AuthContext';
@@ -11,23 +11,19 @@ import './TopBar.css';
 export default function TopBar({ title, onMenuToggle }) {
   const { user } = useAuth();
   const {
-    products, warehouses, receipts, deliveries, transfers, adjustments,
+    products, warehouses, receipts, deliveries, adjustments,
     getLowStockProducts, getOutOfStockProducts
   } = useApp();
   const navigate = useNavigate();
 
-  // === SEARCH STATE ===
   const [searchQuery, setSearchQuery] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const searchRef = useRef(null);
   const searchInputRef = useRef(null);
-
-  // === NOTIFICATION STATE ===
   const [notifOpen, setNotifOpen] = useState(false);
   const notifRef = useRef(null);
 
-  // === SEARCH LOGIC ===
   const searchResults = useMemo(() => {
     if (!searchQuery || searchQuery.length < 2) return null;
     const q = searchQuery.toLowerCase();
@@ -38,7 +34,7 @@ export default function TopBar({ title, onMenuToggle }) {
     ).slice(0, 5);
     if (matchedProducts.length) {
       results.products = matchedProducts.map(p => ({
-        id: p.id, label: p.name, sub: p.sku, path: '/products'
+        id: p.id, label: p.name, sub: p.sku, path: '/stock'
       }));
     }
 
@@ -52,29 +48,20 @@ export default function TopBar({ title, onMenuToggle }) {
     }
 
     const matchedReceipts = receipts.filter(r =>
-      r.ref.toLowerCase().includes(q) || (r.supplier && r.supplier.toLowerCase().includes(q))
+      r.ref.toLowerCase().includes(q) || (r.contact && r.contact.toLowerCase().includes(q))
     ).slice(0, 5);
     if (matchedReceipts.length) {
       results.receipts = matchedReceipts.map(r => ({
-        id: r.id, label: r.ref, sub: r.supplier || '', path: '/operations/receipts'
+        id: r.id, label: r.ref, sub: r.contact || '', path: '/operations/receipts'
       }));
     }
 
     const matchedDeliveries = deliveries.filter(d =>
-      d.ref.toLowerCase().includes(q) || (d.customer && d.customer.toLowerCase().includes(q))
+      d.ref.toLowerCase().includes(q) || (d.contact && d.contact.toLowerCase().includes(q))
     ).slice(0, 5);
     if (matchedDeliveries.length) {
       results.deliveries = matchedDeliveries.map(d => ({
-        id: d.id, label: d.ref, sub: d.customer || '', path: '/operations/deliveries'
-      }));
-    }
-
-    const matchedTransfers = transfers.filter(t =>
-      t.ref.toLowerCase().includes(q)
-    ).slice(0, 5);
-    if (matchedTransfers.length) {
-      results.transfers = matchedTransfers.map(t => ({
-        id: t.id, label: t.ref, sub: '', path: '/operations/transfers'
+        id: d.id, label: d.ref, sub: d.contact || '', path: '/operations/deliveries'
       }));
     }
 
@@ -88,14 +75,13 @@ export default function TopBar({ title, onMenuToggle }) {
     }
 
     return Object.keys(results).length > 0 ? results : null;
-  }, [searchQuery, products, warehouses, receipts, deliveries, transfers, adjustments]);
+  }, [searchQuery, products, warehouses, receipts, deliveries, adjustments]);
 
   const categoryConfig = {
     products:    { label: 'Products',    icon: <Package size={14} /> },
     warehouses:  { label: 'Warehouses',  icon: <Warehouse size={14} /> },
     receipts:    { label: 'Receipts',    icon: <ClipboardCheck size={14} /> },
     deliveries:  { label: 'Deliveries',  icon: <Truck size={14} /> },
-    transfers:   { label: 'Transfers',   icon: <ArrowLeftRight size={14} /> },
     adjustments: { label: 'Adjustments', icon: <ClipboardList size={14} /> },
   };
 
@@ -106,7 +92,6 @@ export default function TopBar({ title, onMenuToggle }) {
     setMobileSearchOpen(false);
   };
 
-  // Ctrl+K shortcut
   useEffect(() => {
     const handler = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
@@ -118,7 +103,6 @@ export default function TopBar({ title, onMenuToggle }) {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
-  // Click-outside for search & notifications
   useEffect(() => {
     const handler = (e) => {
       if (searchRef.current && !searchRef.current.contains(e.target)) {
@@ -132,21 +116,19 @@ export default function TopBar({ title, onMenuToggle }) {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  // === NOTIFICATION LOGIC ===
   const lowStock = getLowStockProducts();
   const outOfStock = getOutOfStockProducts();
-  const pendingReceipts = receipts.filter(r => r.status === 'Draft');
-  const pendingDeliveries = deliveries.filter(d => d.status === 'Draft');
-  const pendingTransfers = transfers.filter(t => t.status === 'Draft');
+  const pendingReceipts = receipts.filter(r => r.status === 'Draft' || r.status === 'Ready');
+  const pendingDeliveries = deliveries.filter(d => d.status === 'Draft' || d.status === 'Waiting' || d.status === 'Ready');
   const totalNotifications = lowStock.length + outOfStock.length +
-    pendingReceipts.length + pendingDeliveries.length + pendingTransfers.length;
+    pendingReceipts.length + pendingDeliveries.length;
 
   const renderSearchResults = () => {
     if (!searchQuery || searchQuery.length < 2) {
       return <div className="search-hint">Type at least 2 characters to search...</div>;
     }
     if (!searchResults) {
-      return <div className="search-no-results">No results found for "{searchQuery}"</div>;
+      return <div className="search-no-results">No results found for &quot;{searchQuery}&quot;</div>;
     }
     return Object.entries(searchResults).map(([category, items]) => (
       <div key={category} className="search-category">
@@ -178,7 +160,6 @@ export default function TopBar({ title, onMenuToggle }) {
           <h1 className="topbar-title">{title}</h1>
         </div>
         <div className="topbar-right">
-          {/* Desktop Search */}
           <div className="topbar-search" ref={searchRef}>
             <Search size={16} />
             <input
@@ -196,20 +177,12 @@ export default function TopBar({ title, onMenuToggle }) {
             )}
           </div>
 
-          {/* Mobile Search Button */}
-          <button
-            className="topbar-search-mobile"
-            onClick={() => setMobileSearchOpen(true)}
-          >
+          <button className="topbar-search-mobile" onClick={() => setMobileSearchOpen(true)}>
             <Search size={18} />
           </button>
 
-          {/* Notification Bell */}
           <div className="topbar-notification-wrap" ref={notifRef}>
-            <button
-              className="topbar-notification"
-              onClick={() => setNotifOpen(o => !o)}
-            >
+            <button className="topbar-notification" onClick={() => setNotifOpen(o => !o)}>
               <Bell size={18} />
               {totalNotifications > 0 && <span className="notification-dot"></span>}
             </button>
@@ -231,16 +204,10 @@ export default function TopBar({ title, onMenuToggle }) {
                           </div>
                           {outOfStock.slice(0, 3).map(p => (
                             <button key={p.id} className="notification-item notification-danger"
-                              onClick={() => { navigate('/products'); setNotifOpen(false); }}>
+                              onClick={() => { navigate('/stock'); setNotifOpen(false); }}>
                               {p.name} <span className="notification-item-sub">{p.sku}</span>
                             </button>
                           ))}
-                          {outOfStock.length > 3 && (
-                            <button className="notification-more"
-                              onClick={() => { navigate('/products'); setNotifOpen(false); }}>
-                              +{outOfStock.length - 3} more...
-                            </button>
-                          )}
                         </div>
                       )}
                       {lowStock.length > 0 && (
@@ -250,16 +217,10 @@ export default function TopBar({ title, onMenuToggle }) {
                           </div>
                           {lowStock.slice(0, 3).map(p => (
                             <button key={p.id} className="notification-item notification-warning"
-                              onClick={() => { navigate('/products'); setNotifOpen(false); }}>
+                              onClick={() => { navigate('/stock'); setNotifOpen(false); }}>
                               {p.name} <span className="notification-item-sub">{p.sku}</span>
                             </button>
                           ))}
-                          {lowStock.length > 3 && (
-                            <button className="notification-more"
-                              onClick={() => { navigate('/products'); setNotifOpen(false); }}>
-                              +{lowStock.length - 3} more...
-                            </button>
-                          )}
                         </div>
                       )}
                       {pendingReceipts.length > 0 && (
@@ -270,7 +231,7 @@ export default function TopBar({ title, onMenuToggle }) {
                           {pendingReceipts.slice(0, 3).map(r => (
                             <button key={r.id} className="notification-item"
                               onClick={() => { navigate('/operations/receipts'); setNotifOpen(false); }}>
-                              {r.ref} <span className="notification-item-sub">{r.supplier}</span>
+                              {r.ref} <span className="notification-item-sub">{r.contact}</span>
                             </button>
                           ))}
                         </div>
@@ -283,20 +244,7 @@ export default function TopBar({ title, onMenuToggle }) {
                           {pendingDeliveries.slice(0, 3).map(d => (
                             <button key={d.id} className="notification-item"
                               onClick={() => { navigate('/operations/deliveries'); setNotifOpen(false); }}>
-                              {d.ref} <span className="notification-item-sub">{d.customer}</span>
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                      {pendingTransfers.length > 0 && (
-                        <div className="notification-section">
-                          <div className="notification-section-title">
-                            <ArrowLeftRight size={14} /> Pending Transfers ({pendingTransfers.length})
-                          </div>
-                          {pendingTransfers.slice(0, 3).map(t => (
-                            <button key={t.id} className="notification-item"
-                              onClick={() => { navigate('/operations/transfers'); setNotifOpen(false); }}>
-                              {t.ref}
+                              {d.ref} <span className="notification-item-sub">{d.contact}</span>
                             </button>
                           ))}
                         </div>
@@ -309,12 +257,11 @@ export default function TopBar({ title, onMenuToggle }) {
           </div>
 
           <div className="topbar-user">
-            <div className="topbar-avatar">{user?.name?.charAt(0).toUpperCase() || 'U'}</div>
+            <div className="topbar-avatar">{(user?.loginId || user?.name || 'U').charAt(0).toUpperCase()}</div>
           </div>
         </div>
       </header>
 
-      {/* Mobile Full-Screen Search Overlay */}
       {mobileSearchOpen && (
         <div className="mobile-search-overlay">
           <div className="mobile-search-header">

@@ -1,45 +1,45 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
-/* ===== CSS Variables / Neo-Brutalist Design Tokens ===== */
+/* ===== CSS Variables / Off-White & Green Theme ===== */
 :root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-tertiary: #f1f3f5;
-  --bg-card: #ffffff;
-  --bg-hover: #f1f3f5;
-  --bg-input: #ffffff;
-  --bg-modal-overlay: rgba(0,0,0,0.5);
-  --bg-sidebar: #ffffff;
-  --bg-sidebar-hover: #f8f9fa;
-  --bg-sidebar-active: #ff90e8;
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8FBF8;
+  --bg-tertiary: #EDF5ED;
+  --bg-card: #FFFFFF;
+  --bg-hover: #EDF5ED;
+  --bg-input: #FFFFFF;
+  --bg-modal-overlay: rgba(0, 0, 0, 0.45);
+  --bg-sidebar: #F3F9F3;
+  --bg-sidebar-hover: #E5EFE5;
+  --bg-sidebar-active: #2E7D52;
 
-  --accent: #ff90e8; /* Gumroad pink */
-  --accent-hover: #ff7be1;
-  --accent-soft: #ffe8f8;
+  --accent: #2E7D52;
+  --accent-hover: #1B5E3A;
+  --accent-soft: #E3F4EB;
 
-  --success: #b2f2bb; /* Neo brutalist soft green */
-  --success-border: #2b8a3e;
-  --success-text: #2b8a3e;
-  
-  --warning: #ffec99; /* Neo brutalist soft yellow */
-  --warning-border: #e67700;
-  --warning-text: #e67700;
-  
-  --info: #d0ebff; /* Neo brutalist soft blue */
-  --info-border: #1864ab;
-  --info-text: #1864ab;
-  
-  --danger: #ffc9c9; /* Neo brutalist soft red */
-  --danger-border: #c92a2a;
-  --danger-text: #c92a2a;
+  --success: #C8E6C9;
+  --success-border: #2E7D32;
+  --success-text: #1B5E20;
 
-  --text-primary: #000000;
-  --text-secondary: #222222;
-  --text-muted: #555555;
-  --text-accent: #000000;
+  --warning: #FFF3C4;
+  --warning-border: #C67C00;
+  --warning-text: #7A4F00;
 
-  --border: #000000;
-  --border-light: #000000;
+  --info: #DCEEFB;
+  --info-border: #1C5E8A;
+  --info-text: #1C5E8A;
+
+  --danger: #FDDCDC;
+  --danger-border: #B71C1C;
+  --danger-text: #B71C1C;
+
+  --text-primary: #111111;
+  --text-secondary: #333333;
+  --text-muted: #666666;
+  --text-accent: #111111;
+
+  --border: #1A2A1A;
+  --border-light: #1A2A1A;
   --border-width: 1px;
 
   --radius-sm: 4px;
@@ -87,8 +87,9 @@ a {
   text-decoration-thickness: 1px;
 }
 
-a:hover { 
+a:hover {
   background-color: var(--accent);
+  color: #ffffff;
   text-decoration: none;
 }
 
@@ -105,8 +106,8 @@ h3 { font-size: 1.15rem; }
 
 /* ===== Scrollbar ===== */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: var(--bg-primary); border-left: var(--border-width) solid var(--border); }
-::-webkit-scrollbar-thumb { background: #000; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); border-left: var(--border-width) solid var(--border); }
+::-webkit-scrollbar-thumb { background: var(--accent); }
 
 /* ===== Form Elements ===== */
 input, select, textarea {
@@ -171,9 +172,11 @@ label {
 
 .btn-primary {
   background: var(--accent);
+  color: #ffffff;
 }
 .btn-primary:hover {
   background: var(--accent-hover);
+  color: #ffffff;
 }
 
 .btn-secondary {
@@ -203,7 +206,7 @@ label {
   background: var(--success);
 }
 .btn-success:hover {
-  background: #96f0a3;
+  background: #a8d5a8;
 }
 
 .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
@@ -313,10 +316,12 @@ label {
   padding: 18px 24px;
   border-bottom: var(--border-width) solid var(--border);
   background: var(--accent);
+  color: #ffffff;
 }
 
 .modal-header h2 {
   font-size: 1.15rem;
+  color: #ffffff;
 }
 
 .modal-body {
@@ -455,6 +460,221 @@ label {
   margin-bottom: 12px;
 }
 
+/* ===== View Toggle ===== */
+.view-toggle {
+  display: inline-flex;
+  gap: 0;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.view-toggle .btn {
+  border: none;
+  border-radius: 0;
+  border-right: var(--border-width) solid var(--border);
+}
+
+.view-toggle .btn:last-child {
+  border-right: none;
+}
+
+/* ===== Kanban Board ===== */
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.kanban-column {
+  background: var(--bg-secondary);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.kanban-column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--bg-tertiary);
+  border-bottom: var(--border-width) solid var(--border);
+}
+
+.kanban-column-header h3 {
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.kanban-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  background: var(--accent);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.kanban-column-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 100px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.kanban-empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  padding: 20px 0;
+  font-weight: 500;
+}
+
+.kanban-card {
+  background: var(--bg-card);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0;
+  cursor: pointer;
+  transition: transform var(--transition-normal);
+  box-shadow: 1px 1px 0 var(--border);
+}
+
+.kanban-card:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 2px 2px 0 var(--border);
+}
+
+.kanban-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: var(--border-width) solid var(--border);
+  background: var(--bg-secondary);
+}
+
+.kanban-card-ref {
+  font-weight: 800;
+  font-size: 0.85rem;
+  font-family: monospace;
+}
+
+.kanban-card-body {
+  padding: 10px 12px;
+}
+
+.kanban-card-contact {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 2px;
+}
+
+.kanban-card-date {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.kanban-card-items {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.kanban-card-actions {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  border-top: var(--border-width) solid var(--border);
+  background: var(--bg-secondary);
+}
+
+/* ===== Notifications ===== */
+.notification {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.notification-warning {
+  background: var(--warning);
+  color: var(--warning-text);
+}
+
+.notification-error {
+  background: var(--danger);
+  color: var(--danger-text);
+}
+
+.notification-success {
+  background: var(--success);
+  color: var(--success-text);
+}
+
+.notification .btn-icon {
+  margin-left: auto;
+}
+
+/* ===== Detail Rows (used in modals) ===== */
+.detail-row {
+  padding: 8px 0;
+  font-size: 0.95rem;
+  border-bottom: 1px solid var(--bg-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row strong {
+  min-width: 120px;
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* ===== Out of Stock Line Highlight ===== */
+.line-out-of-stock {
+  color: var(--danger-text);
+  font-weight: 700;
+  background: var(--danger);
+  padding: 1px 4px;
+  border-radius: var(--radius-sm);
+}
+
+/* ===== Stock Warehouse Badge ===== */
+.stock-wh-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: var(--bg-tertiary);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
   .form-row { grid-template-columns: 1fr; }
@@ -462,4 +682,5 @@ label {
   .filter-bar { flex-direction: column; align-items: stretch; }
   .filter-bar input, .filter-bar select { width: 100%; min-width: auto; }
   .line-item-row { grid-template-columns: 1fr; }
+  .kanban-board { grid-template-columns: 1fr; }
 }

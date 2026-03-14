@@ -6,15 +6,13 @@ import './AppLayout.css';
 
 const TITLES = {
   '/dashboard': 'Dashboard',
-  '/products': 'Products',
-  '/products/categories': 'Categories',
-  '/products/reorder-rules': 'Reorder Rules',
   '/operations/receipts': 'Receipts',
-  '/operations/deliveries': 'Delivery Orders',
-  '/operations/transfers': 'Internal Transfers',
-  '/operations/adjustments': 'Inventory Adjustments',
-  '/operations/move-history': 'Move History',
-  '/settings/warehouses': 'Warehouses',
+  '/operations/deliveries': 'Delivery',
+  '/operations/adjustments': 'Adjustment',
+  '/stock': 'Stock',
+  '/move-history': 'Move History',
+  '/settings/warehouses': 'Warehouse',
+  '/settings/locations': 'Locations',
   '/profile': 'My Profile',
 };
 

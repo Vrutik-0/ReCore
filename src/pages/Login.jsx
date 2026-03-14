@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Box, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Box, User, Lock, Eye, EyeOff } from 'lucide-react';
 import './Auth.css';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
+  const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState('');
@@ -15,16 +15,21 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
-    if (!email || !password) {
+    if (!loginId || !password) {
       setError('Please fill in all fields');
       return;
     }
-    const result = login(email, password);
+    const result = login(loginId, password);
     if (result.success) {
       navigate('/dashboard');
     } else {
       setError(result.error);
     }
+  };
+
+  const fillDemo = () => {
+    setLoginId('admin');
+    setPassword('Admin@123');
   };
 
   return (
@@ -33,22 +38,22 @@ export default function Login() {
       <div className="auth-card animate-slide-up">
         <div className="auth-brand">
           <div className="auth-brand-icon"><Box size={28} /></div>
-          <h1>Core<span className="brand-accent">Inventory</span></h1>
-          <p>Sign in to manage your inventory</p>
+          <h1>Core<span className="brand-green-accent">Inventory</span></h1>
+          <p>SIGN IN</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
           {error && <div className="auth-error">{error}</div>}
 
           <div className="form-group">
-            <label>Email Address</label>
+            <label>Login Id</label>
             <div className="input-icon-wrap">
-              <Mail size={16} />
+              <User size={16} />
               <input
-                type="email"
-                placeholder="you@company.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
+                type="text"
+                placeholder="Enter Login Id"
+                value={loginId}
+                onChange={e => setLoginId(e.target.value)}
               />
             </div>
           </div>
@@ -69,17 +74,24 @@ export default function Login() {
             </div>
           </div>
 
-          <div className="auth-links-row">
-            <Link to="/forgot-password">Forgot password?</Link>
-          </div>
-
           <button type="submit" className="btn btn-primary btn-lg auth-submit">
             Sign In
           </button>
         </form>
 
         <div className="auth-footer">
-          Don't have an account? <Link to="/signup">Sign up</Link>
+          <Link to="/forgot-password">Forget Password ?</Link> | <Link to="/signup">Sign Up</Link>
+        </div>
+
+        <div className="auth-demo-hint">
+          <span className="demo-hint-label">Demo Account</span>
+          <div className="demo-hint-creds">
+            <span><strong>ID:</strong> admin</span>
+            <span><strong>Pass:</strong> Admin@123</span>
+          </div>
+          <button type="button" className="demo-hint-fill" onClick={fillDemo}>
+            Use Demo Credentials
+          </button>
         </div>
       </div>
     </div>

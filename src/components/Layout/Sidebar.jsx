@@ -1,9 +1,8 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
-  LayoutDashboard, Package, Tags, RefreshCw, ClipboardList,
-  Truck, ArrowLeftRight, ClipboardCheck, History, Settings,
-  Warehouse, User, LogOut, ChevronDown, ChevronRight, Box
+  LayoutDashboard, ClipboardList, ClipboardCheck, Truck, Package,
+  History, Settings, Warehouse, MapPin, User, LogOut, ChevronDown, ChevronRight, Box, Sliders
 } from 'lucide-react';
 import { useState } from 'react';
 import './Sidebar.css';
@@ -11,7 +10,7 @@ import './Sidebar.css';
 export default function Sidebar({ collapsed, onToggle, isOpen, onClose }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [openMenus, setOpenMenus] = useState({ products: true, operations: true });
+  const [openMenus, setOpenMenus] = useState({ operations: true, settings: true });
 
   const toggleMenu = (key) => {
     setOpenMenus(prev => ({ ...prev, [key]: !prev[key] }));
@@ -42,32 +41,6 @@ export default function Sidebar({ collapsed, onToggle, isOpen, onClose }) {
           {!collapsed && <span>Dashboard</span>}
         </NavLink>
 
-        {/* Products Group */}
-        <div className="nav-group">
-          <button className="nav-group-toggle" onClick={() => toggleMenu('products')}>
-            <Package size={18} />
-            {!collapsed && (
-              <>
-                <span>Products</span>
-                {openMenus.products ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-              </>
-            )}
-          </button>
-          {openMenus.products && !collapsed && (
-            <div className="nav-group-items">
-              <NavLink to="/products" end className="nav-item sub">
-                <Package size={15} /> <span>All Products</span>
-              </NavLink>
-              <NavLink to="/products/categories" className="nav-item sub">
-                <Tags size={15} /> <span>Categories</span>
-              </NavLink>
-              <NavLink to="/products/reorder-rules" className="nav-item sub">
-                <RefreshCw size={15} /> <span>Reorder Rules</span>
-              </NavLink>
-            </div>
-          )}
-        </div>
-
         {/* Operations Group */}
         <div className="nav-group">
           <button className="nav-group-toggle" onClick={() => toggleMenu('operations')}>
@@ -82,30 +55,52 @@ export default function Sidebar({ collapsed, onToggle, isOpen, onClose }) {
           {openMenus.operations && !collapsed && (
             <div className="nav-group-items">
               <NavLink to="/operations/receipts" className="nav-item sub">
-                <ClipboardCheck size={15} /> <span>Receipts</span>
+                <ClipboardCheck size={15} /> <span>Receipt</span>
               </NavLink>
               <NavLink to="/operations/deliveries" className="nav-item sub">
-                <Truck size={15} /> <span>Deliveries</span>
-              </NavLink>
-              <NavLink to="/operations/transfers" className="nav-item sub">
-                <ArrowLeftRight size={15} /> <span>Transfers</span>
+                <Truck size={15} /> <span>Delivery</span>
               </NavLink>
               <NavLink to="/operations/adjustments" className="nav-item sub">
-                <ClipboardList size={15} /> <span>Adjustments</span>
-              </NavLink>
-              <NavLink to="/operations/move-history" className="nav-item sub">
-                <History size={15} /> <span>Move History</span>
+                <Sliders size={15} /> <span>Adjustment</span>
               </NavLink>
             </div>
           )}
         </div>
 
+        <NavLink to="/stock" className="nav-item">
+          <Package size={18} />
+          {!collapsed && <span>Stock</span>}
+        </NavLink>
+
+        <NavLink to="/move-history" className="nav-item">
+          <History size={18} />
+          {!collapsed && <span>Move History</span>}
+        </NavLink>
+
         <div className="nav-divider" />
 
-        <NavLink to="/settings/warehouses" className="nav-item">
-          <Warehouse size={18} />
-          {!collapsed && <span>Warehouses</span>}
-        </NavLink>
+        {/* Settings Group */}
+        <div className="nav-group">
+          <button className="nav-group-toggle" onClick={() => toggleMenu('settings')}>
+            <Settings size={18} />
+            {!collapsed && (
+              <>
+                <span>Settings</span>
+                {openMenus.settings ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+              </>
+            )}
+          </button>
+          {openMenus.settings && !collapsed && (
+            <div className="nav-group-items">
+              <NavLink to="/settings/warehouses" className="nav-item sub">
+                <Warehouse size={15} /> <span>Warehouse</span>
+              </NavLink>
+              <NavLink to="/settings/locations" className="nav-item sub">
+                <MapPin size={15} /> <span>Locations</span>
+              </NavLink>
+            </div>
+          )}
+        </div>
       </nav>
 
       <div className="sidebar-footer">
@@ -120,9 +115,9 @@ export default function Sidebar({ collapsed, onToggle, isOpen, onClose }) {
         </button>
         {!collapsed && user && (
           <div className="sidebar-user">
-            <div className="user-avatar">{user.name?.charAt(0).toUpperCase()}</div>
+            <div className="user-avatar">{(user.loginId || user.name || 'U').charAt(0).toUpperCase()}</div>
             <div className="user-info">
-              <span className="user-name">{user.name}</span>
+              <span className="user-name">{user.loginId || user.name}</span>
               <span className="user-role">{user.role}</span>
             </div>
           </div>

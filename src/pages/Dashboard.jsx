@@ -1,25 +1,51 @@
 import { useApp } from '../context/AppContext';
 import { useNavigate } from 'react-router-dom';
-import { getTotalStock, getStockStatus } from '../data/store';
-import KPICard from '../components/Dashboard/KPICard';
+import { getTotalStock, getFreeToUse, getStockStatus } from '../data/store';
 import StatusBadge from '../components/common/StatusBadge';
-import { Package, AlertTriangle, ClipboardCheck, Truck, ArrowLeftRight, TrendingUp, Activity } from 'lucide-react';
+import {
+  Package, AlertTriangle, ClipboardCheck, Truck,
+  Activity, TrendingUp, Clock, AlertCircle
+} from 'lucide-react';
 import './Dashboard.css';
 
 export default function Dashboard() {
-  const { products, receipts, deliveries, transfers, movements, getWarehouseName, getLowStockProducts, getOutOfStockProducts } = useApp();
+  const {
+    products, receipts, deliveries, movements,
+    getWarehouseName, getLowStockProducts, getOutOfStockProducts
+  } = useApp();
   const navigate = useNavigate();
 
-  const totalProducts = products.length;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // Receipt KPIs
+  const activeReceipts = receipts.filter(r => r.status !== 'Done' && r.status !== 'Canceled');
+  const receiptsToReceive = receipts.filter(r => r.status === 'Ready').length;
+  const receiptsLate = activeReceipts.filter(r => {
+    if (!r.scheduleDate) return false;
+    return new Date(r.scheduleDate) < today;
+  }).length;
+  const receiptOperations = activeReceipts.length;
+
+  // Delivery KPIs
+  const activeDeliveries = deliveries.filter(d => d.status !== 'Done' && d.status !== 'Canceled');
+  const deliveriesToDeliver = deliveries.filter(d => d.status === 'Ready').length;
+  const deliveriesLate = activeDeliveries.filter(d => {
+    if (!d.scheduleDate) return false;
+    return new Date(d.scheduleDate) < today;
+  }).length;
+  const deliveriesWaiting = deliveries.filter(d => d.status === 'Waiting').length;
+  const deliveryOperations = activeDeliveries.length;
+
+  // Stock alerts
   const lowStock = getLowStockProducts();
   const outOfStock = getOutOfStockProducts();
-  const pendingReceipts = receipts.filter(r => r.status !== 'Done' && r.status !== 'Canceled').length;
-  const pendingDeliveries = deliveries.filter(d => d.status !== 'Done' && d.status !== 'Canceled').length;
-  const scheduledTransfers = transfers.filter(t => t.status !== 'Done' && t.status !== 'Canceled').length;
+  const alertProducts = [...outOfStock, ...lowStock];
 
-  const recentMovements = [...movements].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 8);
-
-  const alertProducts = [...lowStock, ...outOfStock];
+  // Recent activity
+  const recentMovements = [...movements]
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, 8);
 
   return (
     <div className="page-content">
@@ -30,14 +56,98 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="kpi-grid">
-        <KPICard icon={<Package size={22} />} label="Total Products" value={totalProducts} color="accent" onClick={() => navigate('/products')} />
-        <KPICard icon={<AlertTriangle size={22} />} label="Low / Out of Stock" value={lowStock.length + outOfStock.length} color="warning" onClick={() => navigate('/products')} />
-        <KPICard icon={<ClipboardCheck size={22} />} label="Pending Receipts" value={pendingReceipts} color="info" onClick={() => navigate('/operations/receipts')} />
-        <KPICard icon={<Truck size={22} />} label="Pending Deliveries" value={pendingDeliveries} color="danger" onClick={() => navigate('/operations/deliveries')} />
-        <KPICard icon={<ArrowLeftRight size={22} />} label="Scheduled Transfers" value={scheduledTransfers} color="success" onClick={() => navigate('/operations/transfers')} />
+      {/* Operations KPI Cards */}
+      <div className="ops-kpi-grid">
+        {/* Receipt Card */}
+        <div
+          className="card ops-kpi-card ops-kpi-receipt"
+          onClick={() => navigate('/operations/receipts')}
+          style={{ cursor: 'pointer' }}
+        >
+          <div className="ops-kpi-header">
+            <div className="ops-kpi-icon">
+              <ClipboardCheck size={22} />
+            </div>
+            <h3>Receipts</h3>
+          </div>
+          <div className="ops-kpi-metrics">
+            <div className="ops-metric">
+              <span className="ops-metric-value">{receiptsToReceive}</span>
+              <span className="ops-metric-label">To Receive</span>
+            </div>
+            <div className="ops-metric ops-metric-late">
+              <span className="ops-metric-value">{receiptsLate}</span>
+              <span className="ops-metric-label">Late</span>
+            </div>
+            <div className="ops-metric">
+              <span className="ops-metric-value">{receiptOperations}</span>
+              <span className="ops-metric-label">Operations</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Delivery Card */}
+        <div
+          className="card ops-kpi-card ops-kpi-delivery"
+          onClick={() => navigate('/operations/deliveries')}
+          style={{ cursor: 'pointer' }}
+        >
+          <div className="ops-kpi-header">
+            <div className="ops-kpi-icon">
+              <Truck size={22} />
+            </div>
+            <h3>Deliveries</h3>
+          </div>
+          <div className="ops-kpi-metrics">
+            <div className="ops-metric">
+              <span className="ops-metric-value">{deliveriesToDeliver}</span>
+              <span className="ops-metric-label">To Deliver</span>
+            </div>
+            <div className="ops-metric ops-metric-late">
+              <span className="ops-metric-value">{deliveriesLate}</span>
+              <span className="ops-metric-label">Late</span>
+            </div>
+            <div className="ops-metric ops-metric-waiting">
+              <span className="ops-metric-value">{deliveriesWaiting}</span>
+              <span className="ops-metric-label">Waiting</span>
+            </div>
+            <div className="ops-metric">
+              <span className="ops-metric-value">{deliveryOperations}</span>
+              <span className="ops-metric-label">Operations</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Summary Cards */}
+        <div
+          className="card ops-kpi-card ops-kpi-products"
+          onClick={() => navigate('/stock')}
+          style={{ cursor: 'pointer' }}
+        >
+          <div className="ops-kpi-header">
+            <div className="ops-kpi-icon">
+              <Package size={22} />
+            </div>
+            <h3>Products</h3>
+          </div>
+          <div className="ops-kpi-metrics">
+            <div className="ops-metric">
+              <span className="ops-metric-value">{products.length}</span>
+              <span className="ops-metric-label">Total</span>
+            </div>
+            <div className="ops-metric ops-metric-warning">
+              <span className="ops-metric-value">{lowStock.length}</span>
+              <span className="ops-metric-label">Low Stock</span>
+            </div>
+            <div className="ops-metric ops-metric-late">
+              <span className="ops-metric-value">{outOfStock.length}</span>
+              <span className="ops-metric-label">Out of Stock</span>
+            </div>
+          </div>
+        </div>
       </div>
 
+      {/* Dashboard Grid */}
       <div className="dashboard-grid">
         {/* Recent Activity */}
         <div className="card dashboard-card">
