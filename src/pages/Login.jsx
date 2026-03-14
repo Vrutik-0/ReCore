@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Box, User, Lock, Eye, EyeOff } from 'lucide-react';
+import { Layers, User, Lock, Eye, EyeOff } from 'lucide-react';
 import './Auth.css';
 
 export default function Login() {
@@ -37,8 +37,8 @@ export default function Login() {
       <div className="auth-bg-pattern" />
       <div className="auth-card animate-slide-up">
         <div className="auth-brand">
-          <div className="auth-brand-icon"><Box size={28} /></div>
-          <h1>Core<span className="brand-green-accent">Inventory</span></h1>
+          <div className="auth-brand-icon"><Layers size={28} /></div>
+          <h1>Re<span className="brand-green-accent">Core</span></h1>
           <p>SIGN IN</p>
         </div>
 

@@ -22,7 +22,7 @@ export default function AppLayout() {
   const location = useLocation();
 
   const basePath = '/' + location.pathname.split('/').slice(1, 3).join('/');
-  const title = TITLES[location.pathname] || TITLES[basePath] || 'CoreInventory';
+  const title = TITLES[location.pathname] || TITLES[basePath] || 'ReCore';
 
   return (
     <div className="app-layout">

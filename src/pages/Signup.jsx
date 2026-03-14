@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Box, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
+import { Layers, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
 import './Auth.css';
 
 export default function Signup() {
@@ -37,8 +37,8 @@ export default function Signup() {
       <div className="auth-bg-pattern" />
       <div className="auth-card animate-slide-up">
         <div className="auth-brand">
-          <div className="auth-brand-icon"><Box size={28} /></div>
-          <h1>SIGN UP</h1>
+          <div className="auth-brand-icon"><Layers size={28} /></div>
+          <h1>Re<span className="brand-green-accent">Core</span></h1>
           <p>Create your account</p>
         </div>
 

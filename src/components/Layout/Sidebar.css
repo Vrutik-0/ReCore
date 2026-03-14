@@ -49,7 +49,7 @@
   white-space: nowrap;
 }
 
-.brand-accent { color: var(--text-primary); }
+.brand-accent { color: var(--accent); }
 
 /* Navigation */
 .sidebar-nav {

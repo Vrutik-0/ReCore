@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
   LayoutDashboard, ClipboardList, ClipboardCheck, Truck, Package,
-  History, Settings, Warehouse, MapPin, User, LogOut, ChevronDown, ChevronRight, Box, Sliders
+  History, Settings, Warehouse, MapPin, User, LogOut, ChevronDown, ChevronRight, Layers, Sliders
 } from 'lucide-react';
 import { useState } from 'react';
 import './Sidebar.css';
@@ -31,8 +31,8 @@ export default function Sidebar({ collapsed, onToggle, isOpen, onClose }) {
   return (
     <aside className={`sidebar ${collapsed ? 'sidebar-collapsed' : ''} ${isOpen ? 'sidebar-open' : ''}`}>
       <div className="sidebar-brand">
-        <div className="brand-icon"><Box size={22} /></div>
-        {!collapsed && <span className="brand-text">Core<span className="brand-accent">Inventory</span></span>}
+        <div className="brand-icon"><Layers size={22} /></div>
+        {!collapsed && <span className="brand-text">Re<span className="brand-accent">Core</span></span>}
       </div>
 
       <nav className="sidebar-nav" onClick={handleNavClick}>

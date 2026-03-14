@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Box, Mail, Lock, KeyRound } from 'lucide-react';
+import { Layers, Mail, Lock, KeyRound } from 'lucide-react';
 import './Auth.css';
 
 export default function ForgotPassword() {
@@ -59,7 +59,7 @@ export default function ForgotPassword() {
       <div className="auth-bg-pattern" />
       <div className="auth-card animate-slide-up">
         <div className="auth-brand">
-          <div className="auth-brand-icon"><Box size={28} /></div>
+          <div className="auth-brand-icon"><Layers size={28} /></div>
           <h1>Reset Password</h1>
           <p>{step === 1 ? 'Enter your email to receive an OTP' : step === 2 ? 'Enter the OTP sent to your email' : 'Create a new password'}</p>
         </div>
