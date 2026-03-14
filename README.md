@@ -161,22 +161,6 @@ WH/IN/0001    ← Receipt from warehouse with code "WH"
 WH/OUT/0001   ← Delivery from warehouse with code "WH"
 ```
 
----
-
-## Design System
-
-The UI uses a CSS custom-property design token system defined in `src/index.css`.
-
-| Token | Value | Purpose |
-|---|---|---|
-| `--accent` | `#2E7D52` | Forest green — primary actions |
-| `--bg-primary` | `#FFFFFF` | Page background |
-| `--bg-secondary` | `#F8FBF8` | Topbar, sidebar brand |
-| `--bg-sidebar` | `#F3F9F3` | Sidebar fill |
-| `--border` | `#C2D3C2` | Soft green-gray borders |
-
----
-
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
